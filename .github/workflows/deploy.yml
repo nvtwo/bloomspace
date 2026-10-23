@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Build website
-        run: npm run build
+        run: node ./node_modules/vite/bin/vite.js build
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
