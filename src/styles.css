@@ -9,8 +9,9 @@
 /* 1 · Tokens ------------------------------------------------------------- */
 :root {
   color-scheme: light;
-  --font-display: 'Fredoka', 'Nunito', 'Segoe UI Rounded', system-ui, sans-serif;
-  --font-body: 'Figtree', 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+--font-display: 'Poppins', sans-serif;
+--font-body: 'Poppins', sans-serif;
 
   --bg: #f8f3fe;
   --surface: #ffffff;

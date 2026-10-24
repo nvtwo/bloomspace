@@ -7,16 +7,24 @@ import {
 } from 'lucide-react'
 import Journal from './Journal.jsx'
 
+const habitIcons = {
+  GlassWater,
+  BookOpen,
+  Dumbbell,
+  Wind,
+  Sprout,
+}
+
 const starterTasks = [
   { id: 1, title: 'Review lecture notes', time: '09:30 AM', category: 'Study', done: false },
   { id: 2, title: 'Drink enough water', time: '11:00 AM', category: 'Wellness', done: true },
   { id: 3, title: 'Work on personal project', time: '02:00 PM', category: 'Focus', done: false },
 ]
 const starterHabits = [
-  { id: 1, name: 'Drink water', icon: GlassWater, tint: 'mint', done: true },
-  { id: 2, name: 'Read 10 pages', icon: BookOpen, tint: 'lilac', done: false },
-  { id: 3, name: 'Move your body', icon: Dumbbell, tint: 'peach', done: false },
-  { id: 4, name: 'Take a mindful break', icon: Wind, tint: 'blue', done: true },
+  { id: 1, name: 'Drink water', icon: 'GlassWater', tint: 'mint', done: true },
+  { id: 2, name: 'Read 10 pages', icon: 'BookOpen', tint: 'lilac', done: false },
+  { id: 3, name: 'Move your body', icon: 'Dumbbell', tint: 'peach', done: false },
+  { id: 4, name: 'Take a mindful break', icon: 'Wind', tint: 'blue', done: true },
 ]
 const moods = [
   { value: 'lovely', label: 'Lovely', face: '☀️' },
@@ -251,7 +259,7 @@ function TaskRow({ task, onToggle, onDelete }) {
   return <div className={`task-row ${task.done?'is-done':''}`}><button className={`check-circle ${task.done?'checked':''}`} aria-label={task.done?'Mark task incomplete':'Mark task complete'} onClick={onToggle}>{task.done&&<Check size={13}/>}</button><div className="task-main"><span className="task-name">{task.title}</span><span className="task-meta">{task.time} <i/> {task.category}</span></div>{onDelete&&<button className="delete-button" aria-label={`Delete ${task.title}`} onClick={onDelete}><Trash2 size={15}/></button>}</div>
 }
 function HabitRow({ habit, onToggle }) {
-  const Icon = habit.icon || Sprout
+  const Icon = habitIcons[habit.icon] || Sprout
   return <button className={`habit-row ${habit.done?'is-done':''}`} aria-pressed={habit.done} onClick={onToggle}><span className={`habit-icon ${habit.tint||'mint'}`}><Icon size={17}/></span><span className="habit-name">{habit.name}</span><span className={`habit-check ${habit.done?'checked':''}`}>{habit.done&&<Check size={12}/>}</span></button>
 }
 function TasksPanel({tasks,toggleTask,onAdd,onDelete}) {
@@ -260,10 +268,35 @@ function TasksPanel({tasks,toggleTask,onAdd,onDelete}) {
 function HabitsPanel({habits,toggleHabit,onAdd}) {
   return <div className="panel standalone-panel"><div className="panel-heading"><div><div className="panel-title">Your daily rituals <span className="count-pill">{habits.filter(h=>h.done).length}/{habits.length}</span></div><p className="panel-description">Tap a habit when you've completed it today.</p></div><button className="button-primary" onClick={onAdd}><Plus size={16}/> Add habit</button></div><div className="habit-grid">{habits.map(h=><HabitLarge key={h.id} habit={h} onToggle={()=>toggleHabit(h.id)}/>)}</div>{!habits.length&&<EmptyState text="Your habit garden is waiting. Plant your first habit."/>}</div>
 }
-function HabitLarge({habit,onToggle}) {
-  const Icon=habit.icon||Sprout
-  return <button className={`habit-large ${habit.done?'is-done':''}`} aria-pressed={habit.done} onClick={onToggle}><span className={`habit-icon large ${habit.tint||'mint'}`}><Icon size={21}/></span><strong>{habit.name}</strong><span className="habit-large-bottom">{habit.done?<><Check size={14}/> Completed today</>:'Tap to complete'}</span></button>
+
+function HabitLarge({ habit, onToggle }) {
+  const Icon = habitIcons[habit.icon] || Sprout
+
+  return (
+    <button
+      className={`habit-large ${habit.done ? 'is-done' : ''}`}
+      aria-pressed={habit.done}
+      onClick={onToggle}
+    >
+      <span className={`habit-icon large ${habit.tint || 'mint'}`}>
+        <Icon size={21} />
+      </span>
+
+      <strong>{habit.name}</strong>
+
+      <span className="habit-large-bottom">
+        {habit.done ? (
+          <>
+            <Check size={14} /> Completed today
+          </>
+        ) : (
+          'Tap to complete'
+        )}
+      </span>
+    </button>
+  )
 }
+
 function MoodCard({mood,setMood}) {
   return <div className="panel mood-journal-card"><div className="panel-title">How are you feeling today?</div><p className="panel-description">Naming how you feel is a small act of self-care.</p><div className="mood-options journal-moods">{moods.map(m=><button key={m.value} className={`mood-option mood-${m.value} ${mood===m.value?'selected':''}`} onClick={()=>setMood(m.value)} aria-pressed={mood===m.value}><span>{m.face}</span><small>{m.label}</small></button>)}</div>{mood&&<p className="saved-note"><Check size={14}/> Check-in saved for today.</p>}</div>
 }
